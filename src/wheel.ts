@@ -7,10 +7,16 @@ const SLICES = 20;
 const SLICE_DEG = FULL_TURN_DEG / SLICES;
 /** In wheel.png, digit i sits half a slice clockwise of `i * SLICE_DEG` from 12 o'clock. */
 const DIGIT_OFFSET_DEG = SLICE_DEG / 2;
-/** Art is 600px wide; hit wedges cover the ring of digits between these radii. */
+/** Art is 600px wide and the wheel's rim sits at radius 230. */
 const VIEW = 600;
-const INNER_RADIUS = 110;
-const OUTER_RADIUS = 285;
+interface Ring {
+  inner: number;
+  outer: number;
+}
+/** Where a tap counts: a little more forgiving than the digits, but not past the rim. */
+const HIT_RING: Ring = { inner: 125, outer: 245 };
+/** The band the digits are drawn in, which lights up on a tap. */
+const DIGIT_RING: Ring = { inner: 150, outer: 228 };
 /** Pointer travel (px) before a press counts as a drag rather than a tap. */
 const DRAG_THRESHOLD = 8;
 
@@ -19,20 +25,27 @@ function polar(radius: number, degrees: number): [number, number] {
   return [VIEW / 2 + radius * Math.sin(radians), VIEW / 2 - radius * Math.cos(radians)];
 }
 
-function wedgePath(centerDeg: number): string {
+function wedgePath(centerDeg: number, { inner, outer }: Ring): string {
   const from = centerDeg - SLICE_DEG / 2;
   const to = centerDeg + SLICE_DEG / 2;
-  const [ox1, oy1] = polar(OUTER_RADIUS, from);
-  const [ox2, oy2] = polar(OUTER_RADIUS, to);
-  const [ix2, iy2] = polar(INNER_RADIUS, to);
-  const [ix1, iy1] = polar(INNER_RADIUS, from);
+  const [ox1, oy1] = polar(outer, from);
+  const [ox2, oy2] = polar(outer, to);
+  const [ix2, iy2] = polar(inner, to);
+  const [ix1, iy1] = polar(inner, from);
   return [
     `M ${ox1} ${oy1}`,
-    `A ${OUTER_RADIUS} ${OUTER_RADIUS} 0 0 1 ${ox2} ${oy2}`,
+    `A ${outer} ${outer} 0 0 1 ${ox2} ${oy2}`,
     `L ${ix2} ${iy2}`,
-    `A ${INNER_RADIUS} ${INNER_RADIUS} 0 0 0 ${ix1} ${iy1}`,
+    `A ${inner} ${inner} 0 0 0 ${ix1} ${iy1}`,
     'Z',
   ].join(' ');
+}
+
+function svgPath(d: string, className: string): SVGPathElement {
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', d);
+  path.setAttribute('class', className);
+  return path;
 }
 
 export interface Wheel {
@@ -58,12 +71,15 @@ export function createWheel(
   svg.setAttribute('viewBox', `0 0 ${VIEW} ${VIEW}`);
   svg.setAttribute('class', 'wheel__hits');
   svg.setAttribute('aria-hidden', 'true');
+  const glows: SVGPathElement[] = [];
   for (let slice = 0; slice < SLICES; slice++) {
-    const wedge = document.createElementNS(SVG_NS, 'path');
-    wedge.setAttribute('d', wedgePath(slice * SLICE_DEG + DIGIT_OFFSET_DEG));
-    wedge.setAttribute('class', 'wheel__wedge');
+    const centerDeg = slice * SLICE_DEG + DIGIT_OFFSET_DEG;
+    const glow = svgPath(wedgePath(centerDeg, DIGIT_RING), 'wheel__glow');
+    const wedge = svgPath(wedgePath(centerDeg, HIT_RING), 'wheel__wedge');
     wedge.dataset['digit'] = String(slice % 10);
-    svg.append(wedge);
+    wedge.dataset['slice'] = String(slice);
+    glows.push(glow);
+    svg.append(glow, wedge);
   }
 
   const disc = el('div', { className: 'wheel__disc' }, [
@@ -79,8 +95,10 @@ export function createWheel(
     applyRotation(true);
   };
 
-  const flash = (wedge: Element): void => {
-    life.animate(wedge, [{ fillOpacity: 0.6 }, { fillOpacity: 0 }], {
+  const flash = (wedge: SVGElement): void => {
+    const glow = glows[Number(wedge.dataset['slice'])];
+    if (glow === undefined) return;
+    life.animate(glow, [{ fillOpacity: 0.6 }, { fillOpacity: 0 }], {
       duration: 350,
       easing: 'ease-out',
     });
@@ -143,8 +161,9 @@ export function createWheel(
       snap();
       return;
     }
-    const digit = wedge instanceof SVGElement ? wedge.dataset['digit'] : undefined;
-    if (!cancelled && enabled && wedge !== null && digit !== undefined) {
+    if (!(wedge instanceof SVGElement)) return;
+    const digit = wedge.dataset['digit'];
+    if (!cancelled && enabled && digit !== undefined) {
       flash(wedge);
       onDigit(digit, { x: event.clientX, y: event.clientY });
     }

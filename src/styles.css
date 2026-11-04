@@ -40,6 +40,7 @@ body {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   background: #1b1d33;
 }
 
@@ -682,9 +683,15 @@ button:focus-visible {
 }
 
 .wheel__wedge {
-  fill: #fff2a8;
+  fill: #fff;
   fill-opacity: 0;
   cursor: pointer;
+}
+
+.wheel__glow {
+  fill: #fff2a8;
+  fill-opacity: 0;
+  pointer-events: none;
 }
 
 .wheel.is-disabled .wheel__disc {
