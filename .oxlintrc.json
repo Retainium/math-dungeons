@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import"],
+  "categories": { "correctness": "error", "suspicious": "warn" },
+  "rules": {
+    "no-console": "error",
+    "no-nested-ternary": "error",
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }],
+    "typescript/no-explicit-any": "error",
+    "typescript/explicit-function-return-type": "error"
+  },
+  "overrides": [
+    {
+      "files": ["tests/**/*.ts"],
+      "rules": { "typescript/explicit-function-return-type": "off" }
+    }
+  ]
+}

@@ -16,7 +16,7 @@ export interface RoundOptions {
 function sample<T>(items: readonly T[], count: number, random: () => number): T[] {
   return items
     .map((item) => ({ item, key: random() }))
-    .sort((a, b) => a.key - b.key)
+    .toSorted((a, b) => a.key - b.key)
     .slice(0, count)
     .map(({ item }) => item);
 }

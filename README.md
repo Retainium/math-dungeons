@@ -4,21 +4,24 @@ A troll walks down the dungeon hallway towards you. Answer its math question on 
 
 A rewrite of the original Phaser prototype as a dependency-free TypeScript web app: menus are HTML, the battle is DOM and CSS animations, and progress is saved in `localStorage`.
 
+Play it at [games.retainium.ca/math-dungeons](https://games.retainium.ca/math-dungeons/) or [mathdungeons.com](https://mathdungeons.com). It is also embedded in the Retainium app under Learning games.
+
 ## Run it
 
-From the repo root:
+Needs Node 24 and Yarn 4 (`corepack enable`).
 
 ```bash
-yarn workspace @retainium/games dev:math-dungeons    # dev server
-yarn workspace @retainium/games build:math-dungeons  # static build in math-dungeons/dist/
-yarn workspace @retainium/games build:embed          # build into app/public/embed/math-dungeons/
+yarn install
+yarn dev     # dev server
+yarn check   # type-check, lint and unit tests
+yarn build   # static build in dist/
 ```
 
-## Host it on its own
+## Hosting
 
-`dist/` is plain static files with relative paths, so it can be served from any static host and under any sub-path. Nothing in this folder depends on the rest of the repo.
+`dist/` is plain static files with relative paths, so it works from any static host and under any sub-path. Every push to `main` runs the checks and deploys to GitHub Pages through `.github/workflows/deploy.yml`. This repo has no custom domain of its own: it is served under the Retainium org site, so it appears at `games.retainium.ca/math-dungeons/`.
 
-To move the game into its own repository, copy this folder and add a `package.json` with `vite` as a dev dependency and `dev`/`build` scripts (`vite`, `vite build`). The unit tests live in `games/__tests__/unit/logic/math-dungeons/` and import `questions.ts`, `round.ts` and `settings.ts` through the `@retainium/games/*` alias; copy them along and point the imports at `src/` if you want them.
+The Retainium app embeds that URL in an iframe. Saved progress lives in the browser's `localStorage` for `games.retainium.ca`, which is shared between the embed and playing the site directly.
 
 ## Layout
 
