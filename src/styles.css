@@ -292,7 +292,7 @@ button:focus-visible {
 }
 
 .title__troll {
-  width: 85cqw;
+  width: 68cqw;
   filter: drop-shadow(0 2cqw 3cqw rgb(0 0 0 / 60%));
 }
 
@@ -749,11 +749,373 @@ button:focus-visible {
   font-size: 5cqw;
 }
 
+/* ---------- Pets ---------- */
+
+.screen--pets {
+  gap: 1.2cqh;
+  justify-content: flex-start;
+}
+
+.pet-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2cqw;
+  align-self: stretch;
+}
+
+.pet-tab {
+  flex: 1;
+  min-width: 20cqw;
+}
+
+.pets {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pets__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6cqh;
+  width: 100%;
+}
+
+.pets__name {
+  margin: 0;
+  font-size: 6.5cqw;
+  text-align: center;
+}
+
+.pets__status,
+.pets__hint {
+  min-height: 0;
+}
+
+.pets__actions {
+  display: flex;
+  gap: 2cqw;
+  width: 100%;
+}
+
+.pets__action {
+  flex: 1;
+  min-width: 0;
+}
+
+.pets__name-row {
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+}
+
+.pets__draft-name {
+  font-size: 6cqw;
+  font-weight: 700;
+}
+
+.pets__runaway {
+  gap: 1.2cqh;
+  text-align: center;
+}
+
+.pets__runaway-face {
+  margin: 0;
+  font-size: 12cqw;
+}
+
+.pets__runaway-text {
+  margin: 0;
+  font-size: 4.6cqw;
+  line-height: 1.35;
+}
+
+.pen {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  width: 100%;
+  height: 30cqh;
+}
+
+.pen::after {
+  content: '';
+  position: absolute;
+  bottom: 6cqh;
+  left: 50%;
+  z-index: 0;
+  width: 56cqw;
+  height: 7cqh;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 28%);
+  pointer-events: none;
+}
+
+.pet {
+  position: relative;
+  z-index: 1;
+  width: 56cqw;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  transition: none;
+}
+
+.pet:active:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+}
+
+.pet__art {
+  display: block;
+  width: 100%;
+  animation: dragon-idle 2.4s ease-in-out infinite;
+}
+
+.pen__floats {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pen__float {
+  position: absolute;
+  bottom: 48%;
+  font-size: 7cqw;
+}
+
+.pen__bubble {
+  position: absolute;
+  top: 2cqh;
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  padding: 1.2cqw 3.5cqw;
+  border-radius: 3cqw;
+  background: rgb(0 0 0 / 55%);
+  font-size: 4.5cqw;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.pen__food {
+  position: absolute;
+  bottom: 18cqh;
+  left: 58%;
+  z-index: 3;
+  font-size: 10cqw;
+  pointer-events: none;
+}
+
+.tummy {
+  width: 78%;
+  height: 3.2cqw;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgb(0 0 0 / 35%);
+}
+
+.tummy__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+}
+
+.tummy.is-low .tummy__fill {
+  background: var(--red);
+}
+
+.swatches {
+  justify-content: center;
+}
+
+.swatch {
+  width: 12cqw;
+  min-width: 12cqw;
+  min-height: 12cqw;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.swatch.chip[aria-pressed='true'] {
+  box-shadow:
+    0 0 0 0.7cqw #fff,
+    0 0 0 1.5cqw var(--gold);
+}
+
+.swatch--green,
+.swatch--green[aria-pressed='true'] {
+  background: #7cb342;
+}
+
+.swatch--purple,
+.swatch--purple[aria-pressed='true'] {
+  background: #9b59b6;
+}
+
+.swatch--red,
+.swatch--red[aria-pressed='true'] {
+  background: #e74c3c;
+}
+
+.swatch--blue,
+.swatch--blue[aria-pressed='true'] {
+  background: #3498db;
+}
+
+.dragon {
+  overflow: visible;
+  filter: drop-shadow(0 1.2cqw 1.6cqw rgb(0 0 0 / 45%));
+}
+
+.dragon--green {
+  --dragon: #7cb342;
+  --dragon-belly: #dcedc8;
+  --dragon-accent: #558b2f;
+  --dragon-wing: #9ccc65;
+  --dragon-wing-far: #689f38;
+}
+
+.dragon--purple {
+  --dragon: #9b59b6;
+  --dragon-belly: #ead6f4;
+  --dragon-accent: #6c3483;
+  --dragon-wing: #c39bd3;
+  --dragon-wing-far: #7d3c98;
+}
+
+.dragon--red {
+  --dragon: #e74c3c;
+  --dragon-belly: #fadbd8;
+  --dragon-accent: #922b21;
+  --dragon-wing: #f1948a;
+  --dragon-wing-far: #c0392b;
+}
+
+.dragon--blue {
+  --dragon: #3498db;
+  --dragon-belly: #d6eaf8;
+  --dragon-accent: #1a5276;
+  --dragon-wing: #85c1e9;
+  --dragon-wing-far: #2e86c1;
+}
+
+.dragon__ink {
+  stroke: #2b1d05;
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.dragon__body {
+  fill: var(--dragon);
+}
+
+.dragon__belly {
+  fill: var(--dragon-belly);
+}
+
+.dragon__spike,
+.dragon__horn {
+  fill: var(--dragon-accent);
+}
+
+.dragon__wing {
+  fill: var(--dragon-wing);
+}
+
+.dragon__wing--far {
+  fill: var(--dragon-wing-far);
+}
+
+.dragon__cheek {
+  fill: #f48fb1;
+  stroke: none;
+}
+
+.dragon__dot {
+  fill: #2b1d05;
+  stroke: none;
+}
+
+.dragon__shine,
+.dragon__eye-white {
+  fill: #fff;
+  stroke: none;
+}
+
+.dragon__line {
+  fill: none;
+}
+
+.dragon__eye {
+  transform-origin: 114px 50px;
+  animation: dragon-blink 4s step-end infinite;
+}
+
+.dragon__wing--near {
+  transform-origin: 68px 68px;
+  animation: dragon-flap 1.15s ease-in-out infinite;
+}
+
+.dragon__wing--far {
+  transform-origin: 92px 52px;
+  animation: dragon-flap 1.15s ease-in-out infinite reverse;
+}
+
+.dragon.is-hungry .dragon__mouth--smile,
+.dragon.is-hungry .dragon__eye-happy,
+.dragon:not(.is-hungry):not(.is-happy) .dragon__mouth--frown,
+.dragon:not(.is-hungry) .dragon__brow,
+.dragon.is-happy .dragon__eye,
+.dragon.is-happy .dragon__mouth--frown,
+.dragon.is-happy .dragon__brow,
+.dragon:not(.is-happy) .dragon__eye-happy {
+  display: none;
+}
+
+@keyframes dragon-idle {
+  50% {
+    transform: translateY(-1.4cqw);
+  }
+}
+
+@keyframes dragon-blink {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  92%,
+  96% {
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes dragon-flap {
+  50% {
+    transform: rotate(-14deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sprite--walk.sprite--row,
   .sprite--blink.sprite--row,
   .sprite--blink.sprite--column,
-  .battle.is-hurt .battle__flash {
+  .battle.is-hurt .battle__flash,
+  .pet__art,
+  .dragon__eye,
+  .dragon__wing--near,
+  .dragon__wing--far {
     animation: none;
   }
 

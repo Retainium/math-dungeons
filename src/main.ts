@@ -5,6 +5,7 @@ import { avatarScreen } from './screen-avatar';
 import { battleScreen } from './screen-battle';
 import { levelMapScreen } from './screen-level-map';
 import { missionsScreen } from './screen-missions';
+import { petsScreen } from './screen-pets';
 import { settingsScreen } from './screen-settings';
 import { titleScreen } from './screen-title';
 import { Store } from './store';
@@ -14,6 +15,7 @@ const SCREENS: Record<Route['name'], ScreenFactory> = {
   settings: settingsScreen,
   avatar: avatarScreen,
   missions: missionsScreen,
+  pets: petsScreen,
   map: levelMapScreen,
   battle: battleScreen,
 };

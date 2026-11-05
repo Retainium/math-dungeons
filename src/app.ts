@@ -8,6 +8,7 @@ export type Route =
   | { name: 'settings' }
   | { name: 'avatar' }
   | { name: 'missions' }
+  | { name: 'pets' }
   | { name: 'map'; missionId: string }
   | { name: 'battle'; missionId: string; level: Level };
 

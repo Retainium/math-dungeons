@@ -1,3 +1,4 @@
+import { parsePets, parseRunaways, type Pet } from './pets';
 import { MAX_STARS } from './round';
 import { normalizeSettings, type Settings } from './settings';
 
@@ -12,6 +13,8 @@ export interface SaveData {
   settings: Settings;
   sound: boolean;
   music: boolean;
+  pets: Pet[];
+  runaways: string[];
 }
 
 const STORAGE_KEY = 'math-dungeons:save:v1';
@@ -55,6 +58,8 @@ function parseSave(raw: string | null): SaveData {
     settings: normalizeSettings(data['settings']),
     sound: typeof sound === 'boolean' ? sound : true,
     music: typeof music === 'boolean' ? music : true,
+    pets: parsePets(data['pets'], Date.now()),
+    runaways: parseRunaways(data['runaways']),
   };
 }
 
